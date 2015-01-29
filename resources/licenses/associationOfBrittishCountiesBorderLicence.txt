@@ -1,0 +1,3 @@
+The data provided by the Historic County Borders Project are provided free of charge for all personal, educational, non-commercial and commercial use. No specific permission is required. However, the Historic Counties Trust would appreciate an appropriate acknowledgment of the use of the data, along the lines of:
+
+"This [project/mapping/website/publication etc.] made use of data provided by the Historic County Borders Project."
