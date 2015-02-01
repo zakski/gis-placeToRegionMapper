@@ -14,7 +14,7 @@ object BoundaryMap {
   private val YEAR_REGEX = Pattern.compile("([12][0-9]{3})")
 }
 
-class BoundaryMap protected (filePath: String, results: Tuple2[CoordinateReferenceSystem, List[com.hipposretribution.place.gis.Region]]) {
+class BoundaryMap protected (filePath: String, results: Tuple2[CoordinateReferenceSystem, List[Region]]) {
 
   protected val _path = filePath
   protected val _filename = _path.substring(_path.lastIndexOf("\\"))
@@ -42,4 +42,6 @@ class BoundaryMap protected (filePath: String, results: Tuple2[CoordinateReferen
   def getRegionByName(name: String) = {
     _regions.find(reg => reg.name == name).getOrElse(null)
   }
+  
+  def getRegions() = _regions.toArray
 }

@@ -58,7 +58,7 @@ class UKOSGazRecord(fields: Array[String]) extends PlaceRecord(fields(2), fields
   def this(record: String) = this(record.split(":")) //secondary constructor
 
   def setRegions(maps: List[BoundaryMap]) {
-    maps.foreach(map => regions = regions :+ map.getRegionForLocation(coord))
+    maps.foreach(map => {var reg = map.getRegionForLocation(coord); if (reg != null) reg.appendLocale(this); regions = regions :+ map.getRegionForLocation(coord)})
     regions = regions.filter(_ != null)
   }
 

@@ -6,6 +6,7 @@ import com.vividsolutions.jts.geom.Geometry
 import org.opengis.feature.Property
 import com.hipposretribution.io.PropertiesHandler
 import org.geotools.feature.simple.SimpleFeatureImpl
+import com.hipposretribution.place.names.PlaceRecord
 
 object Region {
 
@@ -41,6 +42,8 @@ class Region(feature : SimpleFeatureImpl, geom : Geometry) {
     val lang = Region.getProperty(feature, "lang")
     val level = Region.getProperty(feature, "regionLevel")
     val rType = Region.getProperty(feature, "regionType")
+    
+    protected var _locales = List[PlaceRecord]()
     protected var _year = 0
     
     protected val _geo = geom
@@ -49,6 +52,12 @@ class Region(feature : SimpleFeatureImpl, geom : Geometry) {
         coordinate.within(_geo)
     }
 
+    def appendLocale(record : PlaceRecord){
+       _locales = _locales :+ record
+    }
+    
+    def locales = _locales
+    
     def year(yearString : String) = {
       _year = yearString.toInt
       this
