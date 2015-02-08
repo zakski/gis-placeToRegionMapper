@@ -7,63 +7,68 @@ import org.opengis.feature.Property
 import com.hipposretribution.io.PropertiesHandler
 import org.geotools.feature.simple.SimpleFeatureImpl
 import com.hipposretribution.place.names.PlaceRecord
+import scala.collection.mutable.Buffer
+import org.opengis.feature.simple.SimpleFeature
 
+/**
+ * Companion Object to help extract data from SimpleFeatureImpl to build a region
+ *
+ */
 object Region {
 
-    val fields = List("name", "lang", "regionType", "regionLevel")
+  val fields = List("name", "lang", "regionType", "regionLevel")
 
-    val vars = getProps()
+  val vars = getProps()
 
-    protected def getProps() = {
-        val props = PropertiesHandler.loadProperties("./resources/config/dataset.properties")
-        var variations = Map[String, Array[String]]()
+  // Static method to get useful region metadata using one of many alternative names
+  protected def getProps() = {
+    val props = PropertiesHandler.loadProperties("./resources/config/dataset.properties")
+    var variations = Map[String, Array[String]]()
 
-        fields.foreach(f => variations += f -> props.getProperty(f).split(","))
+    fields.foreach(f => variations += f -> props.getProperty(f).split(","))
 
-        variations.toMap
+    variations.toMap
+  }
+
+  // Static method to get useful region metadata using one of many alternative names
+  protected def getProperty(feature: SimpleFeature, name: String): String = {
+    val variations = vars.getOrElse(name, null)
+
+    for (i <- variations.indices) {
+      val att = feature.getProperty(variations(i))
+      if (att != null) {
+        return att.getValue().toString()
+      }
     }
-
-    protected def getProperty(feature : SimpleFeatureImpl, name : String) : String = {
-        val variations = vars.getOrElse(name, null)
-
-        for (i <- variations.indices) {
-            val att = feature.getProperty(variations(i))
-            if (att != null) {
-                return att.getValue().toString()
-            }
-        }
-        ""
-    }
+    ""
+  }
 }
 
-class Region(feature : SimpleFeatureImpl, geom : Geometry) {
+/**
+ * Class to hold all relevant data from a single region
+ *
+ */
+class Region(feature: SimpleFeature, geom: Geometry, val year: String) {
 
-    val name = Region.getProperty(feature, "name")
-    val lang = Region.getProperty(feature, "lang")
-    val level = Region.getProperty(feature, "regionLevel")
-    val rType = Region.getProperty(feature, "regionType")
-    
-    protected var _locales = List[PlaceRecord]()
-    protected var _year = 0
-    
-    protected val _geo = geom
+  // pull the properties off the simple feature
+  val name = Region.getProperty(feature, "name")
+  val lang = Region.getProperty(feature, "lang")
+  val level = Region.getProperty(feature, "regionLevel")
+  val rType = Region.getProperty(feature, "regionType")
 
-    def contains(coordinate : Point) = {
-        coordinate.within(_geo)
-    }
+  protected val _locales = Buffer[PlaceRecord]()
 
-    def appendLocale(record : PlaceRecord){
-       _locales = _locales :+ record
-    }
-    
-    def locales = _locales
-    
-    def year(yearString : String) = {
-      _year = yearString.toInt
-      this
-    }
-    
-    def year = _year
-    
-    override def toString = name + "[language: " + lang + " tier: " + level + " type: " + rType + " year: " + _year +"]"
+  protected val _geo = geom
+
+  def contains(coordinate: Point) = {
+    coordinate.within(_geo)
+  }
+
+  def appendLocale(record: PlaceRecord) {
+    _locales += record
+  }
+
+  def locales = _locales.toList
+
+  override def toString = name + "[language: " + lang + " tier: " + level + " type: " + rType + " year: " + year + "]"
 }

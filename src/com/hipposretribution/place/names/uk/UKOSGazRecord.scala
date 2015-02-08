@@ -39,7 +39,8 @@ object UKOSGazRecord {
   protected def getLat(degrees: String, minutes: String) = degrees.toInt + minutes.toFloat / 60.0f
 }
 
-class UKOSGazRecord(fields: Array[String]) extends PlaceRecord(fields(2), fields(14), UKOSGazRecord.getLong(fields(10), fields(6), fields(7)), UKOSGazRecord.getLat(fields(4), fields(5))) {
+class UKOSGazRecord(fields: Array[String], maps: List[BoundaryMap]) 
+extends PlaceRecord(fields(2), fields(14), UKOSGazRecord.getLong(fields(10), fields(6), fields(7)), UKOSGazRecord.getLat(fields(4), fields(5)),maps) {
 
   val seq = fields(0).toInt
   val km_ref = fields(1)
@@ -53,17 +54,11 @@ class UKOSGazRecord(fields: Array[String]) extends PlaceRecord(fields(2), fields
   val e_date = (new SimpleDateFormat("dd-MMM-yyyy")).parse(fields(15))
   val update_code = fields(16).charAt(0)
   val sheet = (fields(17).toInt, fields(18).toInt, fields(19).toInt)
-  var regions = List[Region]()
-
-  def this(record: String) = this(record.split(":")) //secondary constructor
-
-  def setRegions(maps: List[BoundaryMap]) {
-    maps.foreach(map => {var reg = map.getRegionForLocation(coord); if (reg != null) reg.appendLocale(this); regions = regions :+ map.getRegionForLocation(coord)})
-    regions = regions.filter(_ != null)
-  }
+ 
+  def this(record: String, maps: List[BoundaryMap]) = this(record.split(":"), maps) //secondary constructor
 
   override def toString = {
-    var builder = new StringBuilder()
+    val builder = new StringBuilder()
 
     builder.append(name + "|")
     builder.append(km_ref + "|")
@@ -86,7 +81,7 @@ class UKOSGazRecord(fields: Array[String]) extends PlaceRecord(fields(2), fields
   }
 
   override def toShortFormString = {
-    var builder = new StringBuilder()
+    val builder = new StringBuilder()
 
     builder.append(name + "|")
     builder.append(coord.getX() + "|")
@@ -98,7 +93,7 @@ class UKOSGazRecord(fields: Array[String]) extends PlaceRecord(fields(2), fields
   }
 
   override def toShortestFormString = {
-    var builder = new StringBuilder()
+    val builder = new StringBuilder()
 
     builder.append(name + "|")
     builder.append(regions.mkString("( ", ", ", ")|"))
