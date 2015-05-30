@@ -1,0 +1,16 @@
+END USER LICENCE FOR UNIVERSITY OF PORTSMOUTH DIGITAL BOUNDARY MATERIAL RELEASED UNDER CC-BY-NC-SA
+
+CC-BY-NC-SA licence released historical digital boundary data from the Great Britain Historic GIS Project, University of Portsmouth
+-------------------------------------------------------------------------------------
+
+The following statement must appear in or on any books, articles, maps, reports, datasets, meta-data or other publications which incorporate or are based on the material downloaded here:
+
+"This work is based on data provided through www.VisionofBritain.org.uk and uses historical material which is copyright of the Great Britain Historical GIS Project and the University of Portsmouth".
+
+Where the above statement is included in a web page or similar online resource, the reference to "www.VisionofBritain.org.uk" must be a working hyperlink.
+
+Copyright (c) 2012 of the Great Britain Historical GIS Project and the University of Portsmouth.  This work is made available under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported Licence, http://creativecommons.org/licenses/by-nc-sa/3.0/
+
+This CC-BY-NC-SA licence relates to this specific dataset. Other datasets available for download from the Great Britain Historical GIS Project are under a variety of licences. 
+	
+
